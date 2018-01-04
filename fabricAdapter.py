@@ -10,21 +10,26 @@
 fabric adapter
 """
 
+import ConfigParser
 import json
+import logging
 import os
 import subprocess
-import logging
 
 class fabricAdapter:
 
     def __init__(self, debug = False):
-        self.__docker_bin = '/usr/bin/docker'
-        self.__docker_cmd = 'exec'
-        self.__container = 'cli'
-        self.__peer_bin = 'peer'
-        self.__peer_cmd = 'chaincode'
-        self.__chaincode_name = 'mycc'
-        self.__channel_id = 'myc'
+        cf = ConfigParser.ConfigParser()
+        cf.read('config.ini')
+
+        self.__docker_bin       = '/usr/bin/docker'
+        self.__docker_cmd       = 'exec'
+        self.__container        = 'cli'
+        self.__peer_bin         = 'peer'
+        self.__peer_cmd         = 'chaincode'
+
+        self.__chaincode_name   = f.get('fabric', 'chaincode_name')
+        self.__channel_id       = f.get('fabric', 'channel_id')
         if not debug:
             self.__err = open(os.devnull, 'w')
         else:
@@ -49,7 +54,7 @@ class fabricAdapter:
                 self.__channel_id
                 ]
 
-    def get(self, k):
+    def get(self, k, debug = False):
         """ Get value of `k` and return its data, in python's dic form. """
         try:
             p = subprocess.Popen(self.__cmd_builder('query', '', str(k) + '"'), stdout = subprocess.PIPE, stderr = subprocess.PIPE)
@@ -58,10 +63,11 @@ class fabricAdapter:
             ret = json.loads(r)
         except IndexError:
             if err.find('(status: 500, message: Asset not found: ') > -1:
-                logging.warn('Asset not found: ' + k)
+                if debug:
+                    logging.warn('Asset not found: ' + k)
             else:
                 logging.error(err)
-            ret = {}
+            ret = []
 	return ret
 
     def set(self, k, v):
