@@ -28,8 +28,8 @@ class fabricAdapter:
         self.__peer_bin         = 'peer'
         self.__peer_cmd         = 'chaincode'
 
-        self.__chaincode_name   = f.get('fabric', 'chaincode_name')
-        self.__channel_id       = f.get('fabric', 'channel_id')
+        self.__chaincode_name   = cf.get('fabric', 'chaincode_name')
+        self.__channel_id       = cf.get('fabric', 'channel_id')
         if not debug:
             self.__err = open(os.devnull, 'w')
         else:

@@ -75,6 +75,18 @@ class multiAsset:
         multiAsset.__fabric.set(userid, vs)
 
     @staticmethod
+    def add_value_by_id(userid, aid, value):
+        """add `value` of `aid` of `userid`"""
+        try:
+            vs = multiAsset.__fabric.get(userid)
+            pos = (i for i,v in enumerate(vs) if v['id'] == aid).next()
+            cvalue = vs[pos]['value']
+            vs[pos]['value'] = cvalue + value
+            multiAsset.__fabric.set(userid, vs)
+        except StopIteration:
+            logging.error("User " + userid + " does not has asset of " + str(aid))
+
+    @staticmethod
     def remove_value_by_id(userid, aid, value):
         """remove `value` of `aid` of `userid`
         fail if `value` > current value
@@ -102,5 +114,5 @@ class multiAsset:
         if multiAsset.__fabric.get(dst) == {}:
             multiAsset.init(dst)
         multiAsset.remove_value_by_id(src, aid, value)
-        multiAsset.update_value_by_id(dst, aid, value)
+        multiAsset.add_value_by_id(dst, aid, value)
 

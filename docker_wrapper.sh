@@ -10,4 +10,3 @@ cmd=$1
 [[ x$cmd = x"invoke" ]] || [[ x$cmd = x"query" ]] || { echo "wrong cmd"; exit 1; }
 shift
 docker exec cli peer chaincode $cmd -n mycc -c '{"Args":'"$@"'}' -C myc #2>/dev/null
-
