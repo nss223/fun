@@ -1,13 +1,16 @@
-# multiAsset
+# MultiAsset
+A mutiple assets management Dapp.
 
 ### Requirements
 1. System deps
     - python 2.7
     - docker
     - [fabric-samples](https://github.com/hyperledger/fabric-samples.git)
+
 Also see [hyperledger prerequisites](http://hyperledger-fabric.readthedocs.io/en/latest/prereqs.html#prerequisites).
 
 2. Dockerimages
+
 Follow the instruction to [download-platform-specific-binaries](http://hyperledger-fabric.readthedocs.io/en/latest/samples.html#download-platform-specific-binaries).
 
 ### Deploy the chaincode
@@ -16,14 +19,17 @@ Follow the instruction to [download-platform-specific-binaries](http://hyperledg
 cd <fabric-samples>/chaincode-docker-devmode
 docker-compose -f docker-compose-simple.yaml up
 ```
-Then wait about 1 minutes to start up.
+Then wait about 1 minutes to start up and exit.
 
 Check the network via
-`docker-compose -f docker-compose-simple.yaml ps`
+```bash
+docker-compose -f docker-compose-simple.yaml ps
+```
 You will see 4 dockers running.
 
 2. Start the chaincode
-Start a new terminal:
+
+In a new terminal:
 ```bash
 docker exec -it chaincode bash
 # you are entering in the `chaincode` docker
@@ -34,6 +40,8 @@ CORE_CHAINCODE_ID_NAME=mycc:0 ./sacc
 Leave it open.
 
 3. Initialize the chaincode
+
+In a new terminal:
 ```bash
 docker exec -it cli bash
 # you are entering in the `cli` docker
@@ -50,5 +58,5 @@ Then exit if everything is OK.
 # OR just
 ./main.py
 ```
-You would see the query result.
+You would see the query result if nothing goes wrong.
 
