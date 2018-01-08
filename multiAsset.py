@@ -7,11 +7,12 @@
 # Distributed under terms of the MIT license.
 
 """
-Multi asset implement
+Multi asset implementation
 """
 
 import json
 import logging
+import sys
 
 from fabricAdapter import fabricAdapter
 
@@ -19,9 +20,12 @@ class multiAsset:
     __fabric = fabricAdapter()
 
     @staticmethod
-    def show(userid):
+    def show(userid, stream = sys.stdout):
         """get values of `userid` and print in a nice form"""
-        print json.dumps(multiAsset.__fabric.get(userid), indent = 4)
+        obj = multiAsset.__fabric.get(userid)
+        json.dump(obj, stream, sort_keys=True,
+                indent=4, separators=(',', ': '))
+        stream.write('\n')
 
     @staticmethod
     def query(userid):
@@ -32,7 +36,7 @@ class multiAsset:
     def query_by_id(userid, aid):
         """get values of `userid`, and filtered by `aid`"""
         return filter(lambda x: x['id'] == aid, multiAsset.query(userid))
-    
+
     @staticmethod
     def query_value_by_id(userid, aid):
         """get value of `aid` of `userid`"""
@@ -58,11 +62,11 @@ class multiAsset:
                     "value": value,
                     }
             multiAsset.issue(userid, data)
-    
+
     @staticmethod
     def init(userid):
         """reset values of `userid`"""
-        multiAsset.__fabric.set(userid, []) 
+        multiAsset.__fabric.set(userid, [])
 
     @staticmethod
     def issue(userid, new_data):
@@ -103,7 +107,7 @@ class multiAsset:
                 del vs[pos]
             else:
                 vs[pos]['value'] = cvalue - value
-            
+
             multiAsset.__fabric.set(userid, vs)
         except StopIteration:
             logging.error("User " + userid + " does not has asset of " + str(aid))
