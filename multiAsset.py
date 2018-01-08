@@ -88,7 +88,12 @@ class multiAsset:
             vs[pos]['value'] = cvalue + value
             multiAsset.__fabric.set(userid, vs)
         except StopIteration:
-            logging.error("User " + userid + " does not has asset of " + str(aid))
+            logging.warn("User " + userid + " does not has asset of " + str(aid))
+            data = {
+                    "id": aid,
+                    "value": value,
+                    }
+            multiAsset.issue(userid, data)
 
     @staticmethod
     def remove_value_by_id(userid, aid, value):
